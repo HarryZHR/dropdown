@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/dropdown.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/dropdown.js"></script>
+</head>
+<body>
+    <div class="wp">
+        <div class="select-wp select1">
+            <div class="select-show-wp">
+                <div class="select-show">-请选择-</div>
+                <div class="select-right">▼</div>
+            </div>
+            <ul class="option-ul">
+            </ul>
+        </div>
+        <div class="select-wp select2">
+            <div class="select-show-wp">
+                <div class="select-show">-请选择-</div>
+                <div class="select-right">▼</div>
+            </div>
+            <ul class="option-ul">
+            </ul>
+        </div>
+        <div class="select-wp select3">
+            <div class="select-show-wp">
+                <div class="select-show">-请选择-</div>
+                <div class="select-right">▼</div>
+            </div>
+            <ul class="option-ul">
+            </ul>
+        </div>
+    </div>
+
+
+<script>
+    let areaList = [{
+        id: '1',
+        areaName: '江苏省',
+        children: [{
+            id: '2',
+            areaName: '南京市',
+            children: [{
+                id: '3',
+                areaName: '江宁区',
+                children: ''
+            },{
+                id: '4',
+                areaName: '栖霞区',
+                children: ''
+            }]
+        }, {
+            id: '5',
+            areaName: '苏州市',
+            children: [{
+                id: '6',
+                areaName: '吴中区',
+                children: ''
+            },{
+                id: '7',
+                areaName: '虎丘区',
+                children: ''
+            },{
+                id: '8',
+                areaName: '姑苏区',
+                children: ''
+            }]
+        }]
+    },{
+        id: '9',
+        areaName: '上海市',
+        children: [{
+            id: '10',
+            areaName: '上海市区',
+            children: [{
+                id: '11',
+                areaName: '静安区',
+                children: ''
+            }, {
+                id: '12',
+                areaName: '浦东区',
+                children: ''
+            }]
+        }]
+    }];
+    new Dropdown({
+        list: areaList,
+        emptyContent: '-请选择-'
+    });
+</script>
+</body>
+</html>
