@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .wp {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .select-wp {
+            width: 200px;
+            margin: 0 20px;
+        }
+
+        .select-show-wp {
+            width: 100%;
+            border: 1px solid #8c8c8c;
+            border-radius: 5px;
+            display: flex;
+            cursor: pointer;
+        }
+
+        .select-show {
+            width: 100%;
+            height: 30px;
+            padding-left: 15px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .select-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 15px;
+
+        }
+
+        .option-ul {
+            width: 100%;
+            border: 1px #cfcfcf solid;
+            display: none;
+            margin: 0;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .option-li {
+            margin: 0;
+            padding-left: 15px;
+            height: 30px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .option-li:hover {
+            background-color: #1E90FF;
+        }
+    </style>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        const emptyContent = '-请选择-';
+        let areaList = [{
+            id: '1',
+            areaName: '江苏省',
+            children: [{
+                id: '2',
+                areaName: '南京市',
+                children: [{
+                    id: '3',
+                    areaName: '江宁区',
+                    children: ''
+                },{
+                    id: '4',
+                    areaName: '栖霞区',
+                    children: ''
+                }]
+            }, {
+                id: '5',
+                areaName: '苏州市',
+                children: [{
+                    id: '6',
+                    areaName: '吴中区',
+                    children: ''
+                },{
+                    id: '7',
+                    areaName: '虎丘区',
+                    children: ''
+                },{
+                    id: '8',
+                    areaName: '姑苏区',
+                    children: ''
+                }]
+            }]
+        },{
+            id: '9',
+            areaName: '上海市',
+            children: [{
+                id: '10',
+                areaName: '上海市区',
+                children: [{
+                    id: '11',
+                    areaName: '静安区',
+                    children: ''
+                }, {
+                    id: '12',
+                    areaName: '浦东区',
+                    children: ''
+                }]
+            }]
+        }];
+        let cityList = [];
+
+        function appendLi(areaList) {
+            let selectHtml = "";
+            for (let index in areaList) {
+                selectHtml += '<li class="option-li" data-id="' + areaList[index].id + '">' + areaList[index].areaName + '</li>';
+            }
+            return selectHtml;
+        }
+
+        function selectChildren(areaId, areaList) {
+            for (let index in areaList) {
+                if (areaList[index].id === areaId) {
+                    return areaList[index].children;
+                }
+            }
+        }
+
+        function initProv() {
+            let provHtml = appendLi(areaList);
+            $('.select1').find('.option-ul').html('').append('<li class="option-li" data-id="-1"></li>').append(provHtml);
+        }
+
+        $(function () {
+            // 初始化省
+            initProv();
+            let dropFlag = false;
+            $('.select-show').text(emptyContent);
+            // 点击显示下拉框
+            $('.select-show-wp').on('click', function (e) {
+                if (dropFlag === false) {
+                    $(this).parent().find('.option-ul').css({
+                        display: 'block'
+                    });
+                    dropFlag = true;
+                } else {
+                    $('.option-ul').css({
+                        display: 'none'
+                    });
+                    dropFlag = false;
+                }
+
+                e.stopPropagation();
+            });
+
+            // 选择下拉框内容
+            $(document).on('click', '.option-li', function () {
+                let selectVal = $(this).text();
+                let $show = $(this).parent().parent().find('.select-show');
+                if (selectVal === '') {
+                    $show.text(emptyContent);
+                } else {
+                    $show.text(selectVal);
+                }
+                $(this).parent().css({
+                    display: 'none'
+                });
+                dropFlag = false;
+            });
+
+            // 点击收起下拉框
+            $(document).on('click', function (e) {
+                if (dropFlag) {
+                    $('.option-ul').css({
+                        display: 'none'
+                    });
+                    dropFlag = false;
+                }
+            });
+
+            // 选择省
+            $('.select1 .option-li').on('click', function () {
+                let id = $(this).attr('data-id');
+                cityList = selectChildren(id, areaList);
+                let cityHtml = appendLi(cityList);
+                // 清空第二个下拉框的选择
+                $('.select2 .select-show').text(emptyContent);
+                $('.select2').find('.option-ul').html('').append('<li class="option-li" data-id="-1"></li>').append(cityHtml);
+                // 清空第三个下拉框的选择
+                $('.select3 .select-show').text(emptyContent);
+                $('.select3').find('.option-ul').html('').append('<li class="option-li" data-id="-1"></li>');
+            });
+
+            // 选择市
+            $(document).on('click', '.select2 .option-li', function () {
+                let id = $(this).attr('data-id');
+                let locationList = selectChildren(id, cityList);
+                let locationHtml = appendLi(locationList);
+                $('.select3 .select-show').text(emptyContent);
+                $('.select3').find('.option-ul').html('').append('<li class="option-li" data-id="-1"></li>').append(locationHtml);
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wp">
+    <div class="select-wp select1">
+        <div class="select-show-wp">
+            <div class="select-show">-请选择-</div>
+            <div class="select-right">▼</div>
+        </div>
+        <ul class="option-ul">
+            <li class="option-li" data-id="-1"></li>
+        </ul>
+    </div>
+
+    <div class="select-wp select2">
+        <div class="select-show-wp">
+            <div class="select-show">-请选择-</div>
+            <div class="select-right">▼</div>
+        </div>
+        <ul class="option-ul">
+            <li class="option-li" data-id="-1"></li>
+        </ul>
+    </div>
+    <div class="select-wp select3">
+        <div class="select-show-wp">
+            <div class="select-show">-请选择-</div>
+            <div class="select-right">▼</div>
+        </div>
+        <ul class="option-ul">
+            <li class="option-li" data-id="-1"></li>
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>
